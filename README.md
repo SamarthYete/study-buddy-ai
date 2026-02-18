@@ -1,16 +1,70 @@
-# React + Vite
+# 🎓 StudyBuddy AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An AI-powered study companion built with React + Vite that helps students understand complex concepts, summarize notes, and generate quizzes on demand.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🧠 **Concept Explainer** — Get simple, clear explanations for any topic with real-world analogies
+- 📄 **Smart Summarizer** — Paste your notes and get concise bullet-point summaries instantly
+- ❓ **Quiz Generator** — Generate interactive multiple-choice quizzes on any subject with instant feedback
 
-## React Compiler
+## 🚀 Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend**: React 19 + Vite
+- **Styling**: Tailwind CSS + Framer Motion animations
+- **Icons**: Lucide React
+- **AI**: OpenRouter API (Mistral 7B Instruct)
+- **Routing**: React Router DOM
 
-## Expanding the ESLint configuration
+## 🛠️ Setup & Installation
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 1. Clone the repository
+```bash
+git clone https://github.com/SamarthYete/study-buddy-ai.git
+cd study-buddy-ai
+```
+
+### 2. Install dependencies
+```bash
+npm install
+```
+
+### 3. Configure API Key
+Create a `.env` file in the root directory:
+```env
+VITE_OPENROUTER_API_KEY=your_openrouter_api_key_here
+```
+
+Get your free API key at [https://openrouter.ai](https://openrouter.ai)
+
+### 4. Run the development server
+```bash
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+## 📁 Project Structure
+
+```
+src/
+├── components/
+│   └── Header.jsx        # Navigation header
+├── pages/
+│   ├── Home.jsx          # Landing page
+│   ├── Explain.jsx       # Concept explainer
+│   ├── Summarize.jsx     # Note summarizer
+│   └── Quiz.jsx          # Quiz generator
+├── lib/
+│   └── gemini.js         # AI API integration (OpenRouter)
+├── App.jsx               # Main app with routing
+└── index.css             # Global styles
+```
+
+## 🌐 Live Demo
+
+Coming soon...
+
+## 📄 License
+
+MIT License — feel free to use and modify!
