@@ -2,22 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 @layer base {
-  :root {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
-    --ring: 224 71% 75%;
-    --radius: 0.5rem;
+  * {
+    font-family: 'Inter', sans-serif;
   }
- 
-  .dark {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+
+  /* Dark mode (default) */
+  html.dark body {
+    @apply bg-slate-950 text-slate-100;
+  }
+
+  /* Light mode */
+  html.light body {
+    background-color: #f1f5f9;
+    color: #0f172a;
+  }
+
+  html.light .bg-slate-900\/50 {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+  }
+
+  html.light .bg-slate-800\/50 {
+    background-color: rgba(241, 245, 249, 0.8) !important;
+  }
+
+  html.light .bg-slate-800\/30 {
+    background-color: rgba(241, 245, 249, 0.6) !important;
+  }
+
+  html.light .text-gray-400 {
+    color: #475569 !important;
+  }
+
+  html.light .text-gray-300 {
+    color: #334155 !important;
+  }
+
+  html.light .text-white {
+    color: #0f172a !important;
+  }
+
+  html.light .border-white\/10 {
+    border-color: rgba(0, 0, 0, 0.08) !important;
+  }
+
+  html.light .backdrop-blur-md {
+    background-color: rgba(248, 250, 252, 0.85) !important;
+  }
+
+  html.light .bg-slate-800 {
+    background-color: #e2e8f0 !important;
+  }
+
+  html.light .bg-slate-700 {
+    background-color: #cbd5e1 !important;
   }
 }
 
 body {
-  @apply bg-slate-950 text-slate-50 antialiased;
+  @apply antialiased;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.5);
 }

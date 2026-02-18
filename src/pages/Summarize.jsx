@@ -3,11 +3,14 @@ import { generateContent } from '../lib/gemini';
 import ReactMarkdown from 'react-markdown';
 import { Loader2, FileText, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useHistory } from '../context/AppContext';
+import jsPDF from 'jspdf';
 
 export default function Summarize() {
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
     const [loading, setLoading] = useState(false);
+    const { addHistory } = useHistory();
 
     const handleSummarize = async () => {
         if (!input.trim()) return;
@@ -16,23 +19,31 @@ export default function Summarize() {
             const prompt = `Summarize the following text concisely. Capture the main points and key takeaways. Format with bullet points:\n\n"${input}"`;
             const result = await generateContent(prompt);
             setOutput(result);
+            addHistory({ type: 'summarize', topic: input.slice(0, 60) + '...', content: result });
         } catch (e) {
-            console.error(e);
-            setOutput(`⚠️ Error: ${e.message || "Failed to generate summary. Please try again."}`);
+            setOutput(`⚠️ Error: ${e.message || "Failed to generate summary."}`);
         } finally {
             setLoading(false);
         }
     };
 
+    const exportPDF = () => {
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text('StudyBuddy AI — Summary', 14, 20);
+        doc.setFontSize(11);
+        const lines = doc.splitTextToSize(output.replace(/[#*`]/g, ''), 180);
+        doc.text(lines, 14, 34);
+        doc.save('summary.pdf');
+    };
+
     return (
-        <div className="pt-24 pb-12 container mx-auto px-4 max-w-4xl min-h-screen">
+        <div className="pt-28 pb-12 container mx-auto px-4 max-w-4xl min-h-screen">
             <div className="text-center mb-12">
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
                     Smart Summarizer
                 </h1>
-                <p className="text-gray-400">
-                    Paste your notes or text here for a quick, organized summary.
-                </p>
+                <p className="text-gray-400">Paste your notes or text here for a quick, organized summary.</p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
@@ -56,13 +67,7 @@ export default function Summarize() {
                 <div className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl h-96 overflow-y-auto relative">
                     <AnimatePresence mode="wait">
                         {output ? (
-                            <motion.div
-                                key="output"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="prose prose-invert prose-sm max-w-none"
-                            >
+                            <motion.div key="output" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="prose prose-invert prose-sm max-w-none">
                                 <ReactMarkdown
                                     components={{
                                         ul: ({ node, ...props }) => <ul className="list-disc pl-4 space-y-2 text-gray-300" {...props} />,
@@ -72,22 +77,19 @@ export default function Summarize() {
                                 >
                                     {output}
                                 </ReactMarkdown>
+                                <button onClick={exportPDF} className="mt-4 flex items-center gap-2 text-xs text-purple-400 hover:text-purple-300 transition-colors">
+                                    <Download className="w-3.5 h-3.5" /> Export as PDF
+                                </button>
                             </motion.div>
                         ) : (
-                            <motion.div
-                                key="placeholder"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="absolute inset-0 flex flex-col items-center justify-center text-gray-600 pointer-events-none p-8 text-center"
-                            >
+                            <motion.div key="placeholder" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 flex flex-col items-center justify-center text-gray-600 pointer-events-none p-8 text-center">
                                 <FileText className="w-12 h-12 mb-4 opacity-20" />
                                 <p>Summary will appear here...</p>
                             </motion.div>
                         )}
                     </AnimatePresence>
                     {loading && (
-                        <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-10 transition-all">
+                        <div className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-10">
                             <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
                         </div>
                     )}
