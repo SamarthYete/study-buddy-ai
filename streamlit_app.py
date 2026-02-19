@@ -53,8 +53,10 @@ if 'dark_mode' not in st.session_state:
     st.session_state.dark_mode = True
 
 # Get OpenRouter API key
-API_KEY = os.getenv('OPENROUTER_API_KEY', '')
+API_KEY = st.secrets.get('OPENROUTER_API_KEY', '')
 
+if not API_KEY:
+    st.warning("⚠️ OpenRouter API Key is not set! Please add it in Streamlit Cloud secrets.")
 def get_ai_response(prompt: str, system_message: str = "") -> str:
     """
     Get response from OpenRouter API
@@ -125,16 +127,9 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Settings
-    st.subheader("⚙️ Settings")
-    api_key_input = st.text_input(
-        "OpenRouter API Key:",
-        value=API_KEY if API_KEY else "",
-        type="password",
-        help="Get your free API key at https://openrouter.ai"
-    )
-    if api_key_input:
-        os.environ['OPENROUTER_API_KEY'] = api_key_input
+# Settings section removed - API key is now managed securely via Streamlit Cloud secrets
+    st.info("🔐 API Key Security: Your OpenRouter API key is securely stored in Streamlit Cloud secrets and is never displayed or exposed in the UI.")
+    st.write("✅ API Key Status:", "🟢 Configured" if API_KEY else "🔴 Not Set")
 
 # Page routing
 if page == "🏠 Home":
